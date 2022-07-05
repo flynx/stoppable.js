@@ -28,19 +28,6 @@ var AsyncGenerator =
 
 //---------------------------------------------------------------------
 
-var STOP =
-module.STOP = 
-function(value){
-	return {
-		__proto__: STOP.prototype,
-		doc: 'stop iteration.',
-		value,
-	} }
-
-
-
-//---------------------------------------------------------------------
-
 // Wrap a callable in a STOP handler
 //
 // 	stoppable(func)
@@ -76,8 +63,7 @@ function(value){
 //
 // NOTE: this repeats the same code at lest twice, not sure yet how to avoid 
 // 		this...
-var stoppable =
-module.stoppable =
+module =
 function(func){
 	return Object.assign(
 		func instanceof Generator ?
@@ -137,6 +123,18 @@ function(func){
 				throw err } },
 		{ toString: function(){
 			return func.toString() }, }) }
+
+
+
+//---------------------------------------------------------------------
+
+module.STOP = 
+function(value){
+	return {
+		__proto__: module.STOP.prototype,
+		doc: 'stop iteration.',
+		value,
+	} }
 
 
 
