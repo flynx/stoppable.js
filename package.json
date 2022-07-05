@@ -1,0 +1,19 @@
+{
+  "name": "ig-stoppable",
+  "version": "1.0.0",
+  "description": "Utility library implementing tooling to make stoppable functions...",
+  "main": "stoppable.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flynx/stoppable.js.git"
+  },
+  "author": "Alex A. Naanou",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/flynx/stoppable.js/issues"
+  },
+  "homepage": "https://github.com/flynx/stoppable.js#readme"
+}
