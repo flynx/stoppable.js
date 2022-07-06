@@ -18,6 +18,9 @@
 //---------------------------------------------------------------------
 // helpers...
 
+var AsyncFunction =
+	(async function(){}).constructor
+
 var Generator = 
 	(function*(){}).constructor
 
@@ -66,10 +69,9 @@ var AsyncGenerator =
 module =
 function(func){
 	return Object.assign(
+		// NOTE: the below implementations are almost the same, the main 
+		// 		differences being the respective generator/async mechanics...
 		func instanceof Generator ?
-			// NOTE: the only difference between Generator/AsyncGenerator 
-			// 		versions of this is the async keyword -- keep them 
-			// 		in sync...
 			function*(){
 				try{
 					for(var res of func.call(this, ...arguments)){
@@ -87,12 +89,9 @@ function(func){
 						return }
 					throw err } }
 		: func instanceof AsyncGenerator ?
-			// NOTE: the only difference between Generator/AsyncGenerator 
-			// 		versions of this is the async keyword -- keep them 
-			// 		in sync...
 			async function*(){
 				try{
-					for(var res of func.call(this, ...arguments)){
+					for await(var res of func.call(this, ...arguments)){
 						if(res === module.STOP){
 							return }
 						if(res instanceof module.STOP){
@@ -105,6 +104,22 @@ function(func){
 					} else if(err instanceof module.STOP){
 						yield err.value
 						return }
+					throw err } }
+		: func instanceof AsyncFunction ?
+			async function(){
+				try{
+					var res = await func.call(this, ...arguments)
+					// NOTE: this is here for uniformity...
+					if(res === module.STOP){
+						return }
+					if(res instanceof module.STOP){
+						return res.value }
+					return res
+				} catch(err){
+					if(err === module.STOP){
+						return
+					} else if(err instanceof module.STOP){
+						return err.value }
 					throw err } }
 		: function(){
 			try{
