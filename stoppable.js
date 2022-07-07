@@ -16,8 +16,8 @@
 
 
 //---------------------------------------------------------------------
-// helpers...
 
+// need to expose some types that JS hides from us...
 var AsyncFunction =
 	(async function(){}).constructor
 
@@ -45,6 +45,7 @@ var AsyncGenerator =
 //
 // The client callable can be one of:
 // 	- function
+// 	- async function
 // 	- generator
 // 	- async generator
 //
@@ -71,6 +72,7 @@ function(func){
 	return Object.assign(
 		// NOTE: the below implementations are almost the same, the main 
 		// 		differences being the respective generator/async mechanics...
+		// generator...
 		func instanceof Generator ?
 			function*(){
 				try{
@@ -88,6 +90,7 @@ function(func){
 						yield err.value
 						return }
 					throw err } }
+		// async generator...
 		: func instanceof AsyncGenerator ?
 			async function*(){
 				try{
@@ -105,6 +108,7 @@ function(func){
 						yield err.value
 						return }
 					throw err } }
+		// async function...
 		: func instanceof AsyncFunction ?
 			async function(){
 				try{
@@ -121,6 +125,7 @@ function(func){
 					} else if(err instanceof module.STOP){
 						return err.value }
 					throw err } }
+		// function...
 		: function(){
 			try{
 				var res = func.call(this, ...arguments)
@@ -147,6 +152,7 @@ module.STOP =
 function(value){
 	return {
 		__proto__: module.STOP.prototype,
+
 		doc: 'stop iteration.',
 		value,
 	} }
