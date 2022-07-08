@@ -1,6 +1,8 @@
 # stoppable.js
+
 Utility library implementing tooling to make stoppable functions...
 
+XXX concept and theory of operation...
 
 - [stoppable.js](#stoppablejs)
   - [Install / import](#install--import)
@@ -13,7 +15,6 @@ Utility library implementing tooling to make stoppable functions...
     - [Generator](#generator)
     - [Async generator](#async-generator)
   - [License](#license)
-
 
 
 ## Install / import
