@@ -2,7 +2,12 @@
 
 Utility library implementing tooling to make stoppable functions...
 
-XXX concept and theory of operation...
+This library enables the user to drop out of a function/generator without the 
+need to thread the result through the call stack. This is in concept similar to
+executing `return ..` from a nested loop to terminate and return from a function
+but `stoppable.js` allows us to do the same from a nested set of function calls.
+This is also similar to _Python_'s `raise StopIteration` approach to stopping 
+iteration.
 
 - [stoppable.js](#stoppablejs)
   - [Install / import](#install--import)
@@ -85,6 +90,28 @@ var func = stoppable(function(){
 
 var value = func() // -> 'something'
 ```
+
+Dropping out of recursion avoiding threading the result up the chain:
+```javascript
+
+// Note that we split the recursive part and the interface part, this is done
+// to keep the STOP catching only to the top level and thus avoid threading 
+// the result back up the recursion...
+var _find = function(L, e){
+    if(L.length == 0){
+        throw stoppable.STOP(false) }
+    if(L[0] == e){
+        throw stoppable.STOP(true) }
+    // look further down...
+    _find(L.slice(1), e) }
+
+var find = stoppable(_find)
+
+find([1,2,3,4,5,6,7], 6) // -> true
+```
+
+For more examples see [`type.js`' `Array.prototype.smap(..)` and friends](https://github.com/flynx/types.js#arraysmap--arraysfilter--arraysreduce--arraysforeach).
+
 
 
 ### Async function
