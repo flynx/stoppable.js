@@ -56,7 +56,7 @@ stoppable(<async-generator>)
 
 ### `stoppable.STOP / stoppable.STOP(..)`
 
-A special object/constructor that can be either returned/thrown _as-is_ or 
+A special object/constructor that can either be returned/thrown _as-is_ or 
 used to create an _instance_ to be returned thrown.
 
 ```bnf
@@ -67,8 +67,9 @@ stoppable.STOP(<value>)
     -> <stop-object>
 ```
 
-This will get intercepted by `stoppable(..)` and appropriately handled merging 
-it into the return/yield value and stopping the function/iterator.
+This will get intercepted by `stoppable(..)` and appropriately handled, stopping 
+the function iterator and merging the value into the yields of a generator or 
+returning it from a function depending on the wrapper type.
 
 `<stop-object>` can contain a value that will get handled by `stoppable(..)` (default: `undefined`).
 
