@@ -67,6 +67,7 @@ var AsyncGenerator =
 //
 // NOTE: this repeats the same code at lest twice, not sure yet how to avoid 
 // 		this...
+// XXX need to give onstop(..) access to the actual call context...
 module =
 function(func, onstop){
 	return Object.assign(
@@ -78,8 +79,12 @@ function(func, onstop){
 				try{
 					for(var res of func.call(this, ...arguments)){
 						if(res === module.STOP){
+							onstop 
+								&& onstop.call(this)
 							return }
 						if(res instanceof module.STOP){
+							onstop 
+								&& onstop.call(this, res.value)
 							yield res.value
 							return }
 						yield res }
@@ -105,7 +110,7 @@ function(func, onstop){
 							return }
 						if(res instanceof module.STOP){
 							onstop 
-								&& onstop.call(this, err.value)
+								&& onstop.call(this, res.value)
 							yield res.value
 							return }
 						yield res }
@@ -127,8 +132,12 @@ function(func, onstop){
 					var res = await func.call(this, ...arguments)
 					// NOTE: this is here for uniformity...
 					if(res === module.STOP){
+						onstop 
+							&& onstop.call(this)
 						return }
 					if(res instanceof module.STOP){
+						onstop 
+							&& onstop.call(this, res.value)
 						return res.value }
 					return res
 				} catch(err){
@@ -147,8 +156,12 @@ function(func, onstop){
 				var res = func.call(this, ...arguments)
 				// NOTE: this is here for uniformity...
 				if(res === module.STOP){
+					onstop 
+						&& onstop.call(this)
 					return }
 				if(res instanceof module.STOP){
+					onstop 
+						&& onstop.call(this, res.value)
 					return res.value }
 				return res
 			} catch(err){
