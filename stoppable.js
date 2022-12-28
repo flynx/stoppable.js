@@ -68,7 +68,7 @@ var AsyncGenerator =
 // NOTE: this repeats the same code at lest twice, not sure yet how to avoid 
 // 		this...
 module =
-function(func){
+function(func, onstop){
 	return Object.assign(
 		// NOTE: the below implementations are almost the same, the main 
 		// 		differences being the respective generator/async mechanics...
@@ -85,8 +85,12 @@ function(func){
 						yield res }
 				} catch(err){
 					if(err === module.STOP){
+						onstop 
+							&& onstop.call(this)
 						return
 					} else if(err instanceof module.STOP){
+						onstop 
+							&& onstop.call(this, err.value)
 						yield err.value
 						return }
 					throw err } }
@@ -96,15 +100,23 @@ function(func){
 				try{
 					for await(var res of func.call(this, ...arguments)){
 						if(res === module.STOP){
+							onstop 
+								&& onstop.call(this)
 							return }
 						if(res instanceof module.STOP){
+							onstop 
+								&& onstop.call(this, err.value)
 							yield res.value
 							return }
 						yield res }
 				} catch(err){
 					if(err === module.STOP){
+						onstop 
+							&& onstop.call(this)
 						return
 					} else if(err instanceof module.STOP){
+						onstop 
+							&& onstop.call(this, err.value)
 						yield err.value
 						return }
 					throw err } }
@@ -121,8 +133,12 @@ function(func){
 					return res
 				} catch(err){
 					if(err === module.STOP){
+						onstop 
+							&& onstop.call(this)
 						return
 					} else if(err instanceof module.STOP){
+						onstop 
+							&& onstop.call(this, err.value)
 						return err.value }
 					throw err } }
 		// function...
@@ -137,8 +153,12 @@ function(func){
 				return res
 			} catch(err){
 				if(err === module.STOP){
+					onstop 
+						&& onstop.call(this)
 					return
 				} else if(err instanceof module.STOP){
+					onstop 
+						&& onstop.call(this, err.value)
 					return err.value }
 				throw err } },
 		{ toString: function(){
