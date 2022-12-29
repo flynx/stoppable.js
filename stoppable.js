@@ -67,7 +67,6 @@ var AsyncGenerator =
 //
 // NOTE: this repeats the same code at lest twice, not sure yet how to avoid 
 // 		this...
-// XXX need to give onstop(..) access to the actual call context...
 module =
 function(func, onstop){
 	return Object.assign(
@@ -80,22 +79,22 @@ function(func, onstop){
 					for(var res of func.call(this, ...arguments)){
 						if(res === module.STOP){
 							onstop 
-								&& onstop.call(this)
+								&& onstop.call(this, res, ...arguments)
 							return }
 						if(res instanceof module.STOP){
 							onstop 
-								&& onstop.call(this, res.value)
+								&& onstop.call(this, res.value, ...arguments)
 							yield res.value
 							return }
 						yield res }
 				} catch(err){
 					if(err === module.STOP){
 						onstop 
-							&& onstop.call(this)
+							&& onstop.call(this, err, ...arguments)
 						return
 					} else if(err instanceof module.STOP){
 						onstop 
-							&& onstop.call(this, err.value)
+							&& onstop.call(this, err.value, ...arguments)
 						yield err.value
 						return }
 					throw err } }
@@ -106,22 +105,22 @@ function(func, onstop){
 					for await(var res of func.call(this, ...arguments)){
 						if(res === module.STOP){
 							onstop 
-								&& onstop.call(this)
+								&& onstop.call(this, res, ...arguments)
 							return }
 						if(res instanceof module.STOP){
 							onstop 
-								&& onstop.call(this, res.value)
+								&& onstop.call(this, res.value, ...arguments)
 							yield res.value
 							return }
 						yield res }
 				} catch(err){
 					if(err === module.STOP){
 						onstop 
-							&& onstop.call(this)
+							&& onstop.call(this, err, ...arguments)
 						return
 					} else if(err instanceof module.STOP){
 						onstop 
-							&& onstop.call(this, err.value)
+							&& onstop.call(this, err.value, ...arguments)
 						yield err.value
 						return }
 					throw err } }
@@ -133,21 +132,21 @@ function(func, onstop){
 					// NOTE: this is here for uniformity...
 					if(res === module.STOP){
 						onstop 
-							&& onstop.call(this)
+							&& onstop.call(this, res, ...arguments)
 						return }
 					if(res instanceof module.STOP){
 						onstop 
-							&& onstop.call(this, res.value)
+							&& onstop.call(this, res.value, ...arguments)
 						return res.value }
 					return res
 				} catch(err){
 					if(err === module.STOP){
 						onstop 
-							&& onstop.call(this)
+							&& onstop.call(this, err, ...arguments)
 						return
 					} else if(err instanceof module.STOP){
 						onstop 
-							&& onstop.call(this, err.value)
+							&& onstop.call(this, err.value, ...arguments)
 						return err.value }
 					throw err } }
 		// function...
@@ -157,21 +156,21 @@ function(func, onstop){
 				// NOTE: this is here for uniformity...
 				if(res === module.STOP){
 					onstop 
-						&& onstop.call(this)
+						&& onstop.call(this, res, ...arguments)
 					return }
 				if(res instanceof module.STOP){
 					onstop 
-						&& onstop.call(this, res.value)
+						&& onstop.call(this, res.value, ...arguments)
 					return res.value }
 				return res
 			} catch(err){
 				if(err === module.STOP){
 					onstop 
-						&& onstop.call(this)
+						&& onstop.call(this, err, ...arguments)
 					return
 				} else if(err instanceof module.STOP){
 					onstop 
-						&& onstop.call(this, err.value)
+						&& onstop.call(this, err.value, ...arguments)
 					return err.value }
 				throw err } },
 		{ toString: function(){

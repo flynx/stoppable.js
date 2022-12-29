@@ -1,6 +1,6 @@
 {
   "name": "ig-stoppable",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Utility library implementing tooling to make stoppable functions...",
   "main": "stoppable.js",
   "scripts": {
