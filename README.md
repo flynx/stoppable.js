@@ -163,7 +163,7 @@ var value = awat agen() // -> ['something']
 
 [BSD 3-Clause License](./LICENSE)
 
-Copyright (c) 2022-, Alex A. Naanou,  
+Copyright (c) 2022-2023, Alex A. Naanou,  
 All rights reserved.
 
 
